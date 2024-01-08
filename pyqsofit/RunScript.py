@@ -26,20 +26,20 @@ warnings.filterwarnings("ignore")
 
 # Setting the file paths that the code uses
 # The path of the source code file and qsopar.fits
-path1 = '/Users/emilytemple/documents/PyQSOFit2.1.5/pyqsofit/'
+path1 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/'
 # The path of fitting results - can customize, I created a new directory
-path2 = '/Users/emilytemple/documents/PyQSOFit2.1.5/pyqsofit/Fit Results/'     
+path2 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/'     
 # The path of fitted figure - same as above      
-path3 = '/Users/emilytemple/documents/PyQSOFit2.1.5/pyqsofit/Fit Results/QA Other/'
+path3 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/QA Other/'
 # The path of dust reddening map
-path4 = '/Users/emilytemple/documents/PyQSOFit2.1.5/pyqsofit/sfddata/'
+path4 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/sfddata/'
 
 # -----------------------------------------------------------------------------
 # Allowing a loop through directories to make this process faster
 # Once you download all the spectral files from SDSS, this should be able to 
 # loop through all the files, create their directories, and save results
 
-Data_path = '/Users/emilytemple/documents/PyQSOFit2.1.5/pyqsofit/Data'
+Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data'
 Data_list_names = os.listdir(Data_path)
 
 #Pattern to extract the desired number sequence
@@ -201,7 +201,7 @@ def runscript_func(sourcename):
     # Obtain fit result files
     # Path of Line Properties Results for each system 
     
-    path5 = '/Users/emilytemple/documents/PyQSOFit/pyqsofit/Fit Results/Line Properties/'+sourcename+'/'
+    path5 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/Line Properties/'+sourcename+'/'
     
     # this line does not play nice, EMT edit 1/8/24
     # data=fits.open(path3+sourcename+'.fits') 

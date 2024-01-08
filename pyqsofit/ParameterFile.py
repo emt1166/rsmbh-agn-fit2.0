@@ -20,7 +20,7 @@ from astropy.table import Table
 warnings.filterwarnings("ignore")
 
 # Path to where this run code file sits
-path_ex='/Users/emilytemple/documents/PyQSOFit2.1.5/pyqsofit'
+path_ex='/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit'
 #EMT edited the range values to better constrain them
 newdata = np.rec.array([
 (6564.61, r'H$\alpha$', 6300, 6800, 'Ha_br',     3,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.015, 0, 0, 0, 0.05,    1),

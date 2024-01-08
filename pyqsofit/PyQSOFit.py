@@ -1956,7 +1956,7 @@ class QSOFit():
                 format_name = plain_name[:insert_idx] + '\,' + plain_name[insert_idx:]
             else:
                 format_name = plain_name
-            return rf'$\mathrm{{{format_name}}}$'
+            return rf'\mathrm{{{format_name}}}' #EMT edit discard '$' sign
 
         pp = list(self.conti_fit.params.valuesdict().values())
 
