@@ -388,7 +388,7 @@ def fittingscript_func(sourcename):
 #Now we can choose to loop through it
 # if loop is false, then you can specify the spectrum you want
 
-loop = True
+loop = False
 if loop: 
     for source in Data_list:
         fittingscript_func(source)

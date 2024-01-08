@@ -396,7 +396,7 @@ def lineprofilecalc_func(sourcename):
         
 # ----------------------------------------------------------------------------------
 # Deciding to loop through all values or not
-loop = True
+loop = False
 if loop:
     for source in Data_list:
         lineprofilecalc_func(source)

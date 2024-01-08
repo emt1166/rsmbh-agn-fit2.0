@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 16 14:41:15 2023
+Created on Mon Jan  8 15:35:03 2024
 
 @author: emilytemple
-
-This file contains the parameters for each of our lines.
-The parameters here have been edited to reflect the best fitting results from 
-trial and error with many different spectra. 
-They can be edited further to fit particularily difficult/weird spectra. 
-
 """
+
+
+import re
+import os,timeit
 import numpy as np
-import sys, os
-sys.path.append('../')
+from PyQSOFit import QSOFit
 from astropy.io import fits
+import matplotlib.pyplot as plt
 import warnings
+from ppxf.ppxf import ppxf
+import sys
+sys.path.append('../')
 from astropy.table import Table
 warnings.filterwarnings("ignore")
 
@@ -104,9 +105,9 @@ hdr['maxwav'] = 'Upper complex fitting wavelength range'
 hdr['ngauss'] = 'Number of Gaussians for the line'
 
 # Can be set to negative for absorption lines if you want
-hdr['inisca'] = 'Initial guess of line scale [in flux??]'
-hdr['minsca'] = 'Lower range of line scale [flux??]'
-hdr['maxsca'] = 'Upper range of line scale [flux??]'
+hdr['inisca'] = 'Initial guess of line scale [in ??]'
+hdr['minsca'] = 'Lower range of line scale [??]'
+hdr['maxsca'] = 'Upper range of line scale [??]'
 
 hdr['inisig'] = 'Initial guess of linesigma [in lnlambda]'
 hdr['minsig'] = 'Lower range of line sigma [lnlambda]'  
@@ -216,3 +217,110 @@ hdu4 = fits.BinTableHDU(data=measure_info, header=hdr4, name='measure_info')
 
 hdu_list = fits.HDUList([primary_hdu, hdu, hdu2, hdu3, hdu4])
 hdu_list.writeto(os.path.join(path_ex, 'qsopar.fits'), overwrite=True)
+
+# Use custom matplotlib style to make Yue happy
+QSOFit.set_mpl_style()
+# Ignore warnings?
+warnings.filterwarnings("ignore")
+
+# Setting the file paths that the code uses
+# The path of the source code file and qsopar.fits
+path1 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/'
+# The path of fitting results - can customize, I created a new directory
+path2 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/'     
+# The path of fitted figure - same as above      
+path3 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/QA Other/'
+# The path of dust reddening map
+path4 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/sfddata/'
+
+# -----------------------------------------------------------------------------
+# Allowing a loop through directories to make this process faster
+# Once you download all the spectral files from SDSS, this should be able to 
+# loop through all the files, create their directories, and save results
+
+Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers'
+Data_list_names = os.listdir(Data_path)
+
+sourcename='1624-53386-0032'
+
+data = fits.open(os.path.join(path1+'Data/Outliers/spec-'+sourcename+'.fits'))
+lam = 10**data[1].data['loglam']                           # OBS wavelength (A)
+flux = data[1].data['flux']                           # OBS flux (erg/s/cm^2/A)
+err = 1./np.sqrt(data[1].data['ivar'])                          # 1 sigma error
+z = data[2].data['z'][0]                                             # Redshift
+
+# Optional
+ra = data[0].header['plug_ra']  # RA
+dec = data[0].header['plug_dec']  # DEC
+plateid = data[0].header['plateid']  # SDSS plate ID
+mjd = data[0].header['mjd']  # SDSS MJD
+fiberid = data[0].header['fiberid']  # SDSS fiber ID
+
+ngauss_max = 5  # stop at 5 components
+bic_last = np.inf
+
+# Number of Gaussians to try loop
+for ngauss in range(1, ngauss_max):
+
+    print(fr'Fitting broad H$\alpha$ with {ngauss} components.')
+
+    # Change the number of Gaussians for the Ha line in the line parameter file
+
+    hdu_new = hdu.copy()
+    if 'Ha_br' in hdu.data['linename']:
+        hdu.data['ngauss'][hdu.data['linename'] == 'Ha_br'] = ngauss
+    hdu_list = fits.HDUList([primary_hdu, hdu, hdu2, hdu3, hdu4])
+    hdu_list.writeto(os.path.join(path_ex, 'qsopar.fits'), overwrite=True)
+
+    # Do the fitting
+    q = QSOFit(lam, flux, err, z, ra=ra, dec=dec, plateid=plateid, mjd=mjd, fiberid=fiberid, path=path_ex)
+
+    q.Fit(name=None, nsmooth=1, deredden=True, reject_badpix=False, wave_range=None, \
+          wave_mask=None, decompose_host=True, host_prior=True, decomp_na_mask=True, npca_gal=5, npca_qso=10, qso_type='CZBIN1',\
+          Fe_uv_op=True, poly=True, BC=False, rej_abs_conti=False, rej_abs_line=False, \
+          initial_guess=None, MCMC=False, nburn=20, nsamp=200, nthin=10, linefit=True, \
+          save_result=False, plot_fig=False, verbose=False)
+
+    mask_Ha_bic = q.line_result_name == '2_line_min_chi2'
+
+    bic = float(q.line_result[mask_Ha_bic][0])
+    print(bic)
+
+    print(f'Delta BIC = {np.round(bic_last - bic, 1)}')
+
+    # Stop condition of Delta BIC = 10 is a good rule of thumb
+    if bic_last - bic < 10:
+        print(bic_last)
+        print(f'{ngauss-1} components is prefered')
+        break
+
+    bic_last = bic
+
+    # Plot the result
+    if q.MCMC:
+        gauss_result = q.gauss_result[::2]
+    else:
+        gauss_result = q.gauss_result
+
+    fig, ax = plt.subplots(1, 1, figsize=(8, 5))
+
+    # Plot individual line components
+    for p in range(len(gauss_result) // 3):
+        if q.CalFWHM(gauss_result[3 * p + 2]) < 1200:  # < 1200 km/s narrow
+            color = 'g'  # narrow
+        else:
+            color = 'r'  # broad
+        ax.plot(q.wave, q.Onegauss(np.log(q.wave), gauss_result[p * 3:(p + 1) * 3]), color=color)
+
+    # Plot total line model
+    ax.plot(q.wave, q.Manygauss(np.log(q.wave), gauss_result), 'b', lw=2)
+    ax.plot(q.wave, q.line_flux, 'k')
+    ax.set_xlim(6300, 6900)
+    ax.set_xlabel(r'$\rm Rest \, Wavelength$ ($\rm \AA$)', fontsize=20)
+    ax.set_ylabel(r'$\rm f_{\lambda}$ ($\rm 10^{-17} erg\;s^{-1}\;cm^{-2}\;\AA^{-1}$)', fontsize=20)
+
+    c = 1  # Ha
+    ax.text(0.02, 0.80, r'$\chi ^2_\nu=$' + str(np.round(float(q.comp_result[c * 7 + 4]), 2)),
+            fontsize=16, transform=ax.transAxes)
+
+    plt.show()
