@@ -105,9 +105,10 @@ from astropy.modeling import fitting
 
 from astropy.table import Table
 
-from .HostDecomp import Prior_decomp
-from .HostDecomp import Linear_decomp
-from .HostDecomp import ppxf_kinematics
+#EMT edit, discard '.' in front of HostDecomp
+from HostDecomp import Prior_decomp
+from HostDecomp import Linear_decomp
+from HostDecomp import ppxf_kinematics
 
 import warnings
 
