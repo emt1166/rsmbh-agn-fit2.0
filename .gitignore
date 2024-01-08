@@ -239,4 +239,4 @@ cython_debug/
 
 # EMILY's EDITS
 /pyqsofit/qsopar.fits
-pyqsofit/Fit Results
+pyqsofit/Fit Results*

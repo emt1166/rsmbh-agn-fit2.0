@@ -23,7 +23,7 @@ import re
 # Once you download all the spectral files from SDSS, this should be able to 
 # loop through all the files, create their directories, and save results
 
-Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data'
+Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers'
 Data_list_names = os.listdir(Data_path)
 
 #Pattern to extract the desired number sequence
@@ -396,7 +396,7 @@ def lineprofilecalc_func(sourcename):
         
 # ----------------------------------------------------------------------------------
 # Deciding to loop through all values or not
-loop = False
+loop = True
 if loop:
     for source in Data_list:
         lineprofilecalc_func(source)

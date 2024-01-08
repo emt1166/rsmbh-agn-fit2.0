@@ -34,7 +34,7 @@ path4 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/sfddata/'
 # Once you download all the spectral files from SDSS, this should be able to 
 # loop through all the files, create their directories, and save results
 
-Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data'
+Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers'
 Data_list_names = os.listdir(Data_path)
 
 #Pattern to extract the desired number sequence
@@ -59,7 +59,7 @@ def fittingscript_func(sourcename):
     # spec-plateID-MJD-fiberID.fits. Sourcename is just the plateID-MJD-fiberID
     #sourcename = '0646-52523-0075'
     spec = 'spec-'+sourcename+'.fits'
-    data = fits.open(os.path.join(path1+'Data/'+spec))
+    data = fits.open(os.path.join(path1+'Data/Outliers/'+spec))
     lam = 10**data[1].data['loglam']                           # OBS wavelength (A)
     flux = data[1].data['flux']                           # OBS flux (erg/s/cm^2/A)
     err = 1./np.sqrt(data[1].data['ivar'])                          # 1 sigma error
@@ -388,7 +388,7 @@ def fittingscript_func(sourcename):
 #Now we can choose to loop through it
 # if loop is false, then you can specify the spectrum you want
 
-loop = False
+loop = True
 if loop: 
     for source in Data_list:
         fittingscript_func(source)
