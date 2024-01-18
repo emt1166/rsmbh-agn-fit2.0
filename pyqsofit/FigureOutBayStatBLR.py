@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore")
 path_ex='/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit'
 #EMT edited the range values to better constrain them
 newdata = np.rec.array([
-(6564.61, r'H$\alpha$', 6350, 6800, 'Ha_br',     4,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.015, 0, 0, 0, 0.05,    1),
+(6564.61, r'H$\alpha$', 6350, 6800, 'Ha_br',     3,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.015, 0, 0, 0, 0.05,    1),
 (6564.61, r'H$\alpha$', 6500, 6600, 'Ha_na',     1,   0.1, 0.0, 1e10,   1e-3, 5e-4,   0.001,   0.01,  1, 1, 0, 0.002,   1),
 (6549.85, r'H$\alpha$', 6500, 6600, 'NII6549',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   5e-3,  1, 2, 1, 0.001,   1),
 (6585.28, r'H$\alpha$', 6500, 6630, 'NII6585',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   5e-3,  1, 2, 1, 0.003,   1),
@@ -37,7 +37,7 @@ newdata = np.rec.array([
 (5877.29, 'HeI', 5800, 5920, 'HeI5877_br',      1,    0.1, 0.0, 1e10,   5e-3, 0.004, 0.05,      0.015, 0, 0, 0, 0.001,   1), # Added on November 30, 2022 
 # end of Liza Matrecito edits
 
-(4862.68, r'H$\beta$', 4650, 5100, 'Hb_br',       4,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.01, 0, 0, 0, 0.01,    1),
+(4862.68, r'H$\beta$', 4650, 5100, 'Hb_br',       3,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.01, 0, 0, 0, 0.01,    1),
 (4862.68, r'H$\beta$', 4800, 4910, 'Hb_na',       1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   0.01, 1, 1, 0, 0.002,   1),
 (4960.30, r'H$\beta$', 4920, 5100, 'OIII4959c',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   0.01, 1, 1, 1, 0.33,    1),
 (5008.24, r'H$\beta$', 4960, 5100, 'OIII5007c',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   0.01, 1, 1, 1, 1,       1),
@@ -234,14 +234,11 @@ path3 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/QA O
 path4 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/sfddata/'
 
 # -----------------------------------------------------------------------------
-# Allowing a loop through directories to make this process faster
-# Once you download all the spectral files from SDSS, this should be able to 
-# loop through all the files, create their directories, and save results
+# Getting the data file needed by specifying the path and sourcename
 
 Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers'
-Data_list_names = os.listdir(Data_path)
-
-sourcename='1624-53386-0032'
+#Data_list_names = os.listdir(Data_path)
+sourcename='0332-52367-0639'
 
 data = fits.open(os.path.join(path1+'Data/Outliers/spec-'+sourcename+'.fits'))
 lam = 10**data[1].data['loglam']                           # OBS wavelength (A)
@@ -256,35 +253,38 @@ plateid = data[0].header['plateid']  # SDSS plate ID
 mjd = data[0].header['mjd']  # SDSS MJD
 fiberid = data[0].header['fiberid']  # SDSS fiber ID
 
+#Specifying the max num of gaussians to try to fit BLR
 ngauss_max = 5  # stop at 5 components
-bic_last = np.inf
+bic_last = np.inf #start with an "infinite" BIC
 
 # Number of Gaussians to try loop
+# typically 5 gaussians is the max number ever needed, prob a bit overkill
 for ngauss in range(1, ngauss_max):
 
     print(fr'Fitting broad H$\alpha$ with {ngauss} components.')
 
     # Change the number of Gaussians for the Ha line in the line parameter file
 
-    hdu_new = hdu.copy()
+  #  hdu_new = hdu.copy() #making new copy of param table ?? for what
     if 'Ha_br' in hdu.data['linename']:
         hdu.data['ngauss'][hdu.data['linename'] == 'Ha_br'] = ngauss
     hdu_list = fits.HDUList([primary_hdu, hdu, hdu2, hdu3, hdu4])
     hdu_list.writeto(os.path.join(path_ex, 'qsopar.fits'), overwrite=True)
 
     # Do the fitting
-    q = QSOFit(lam, flux, err, z, ra=ra, dec=dec, plateid=plateid, mjd=mjd, fiberid=fiberid, path=path_ex)
+    q = QSOFit(lam, flux, err, z, ra=ra, dec=dec, plateid=plateid, mjd=mjd, fiberid=fiberid, path=path1)
 
     q.Fit(name=None, nsmooth=1, deredden=True, reject_badpix=False, wave_range=None, \
           wave_mask=None, decompose_host=True, host_prior=True, decomp_na_mask=True, npca_gal=5, npca_qso=10, qso_type='CZBIN1',\
           Fe_uv_op=True, poly=True, BC=False, rej_abs_conti=False, rej_abs_line=False, \
-          initial_guess=None, MCMC=False, nburn=20, nsamp=200, nthin=10, linefit=True, \
+          initial_guess=None, MCMC=True, nburn=20, nsamp=200, nthin=10, linefit=True, \
           save_result=False, plot_fig=False, verbose=False)
 
     mask_Ha_bic = q.line_result_name == '2_line_min_chi2'
 
     bic = float(q.line_result[mask_Ha_bic][0])
-    print(bic)
+    print(f'BIC =', bic)
+    print(f'BIC Last=', bic_last)
 
     print(f'Delta BIC = {np.round(bic_last - bic, 1)}')
 
