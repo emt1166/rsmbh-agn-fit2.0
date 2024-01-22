@@ -28,6 +28,9 @@ path2 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/'
 path3 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/QA Other/'
 # The path of dust reddening map
 path4 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/sfddata/'
+# EMT: fitting control or outliers, for organization purposes  
+pathC = path2+'/Line Properties/Control/'
+pathO = path2+'/Line Properties/Outliers/'
 
 # -----------------------------------------------------------------------------
 # Allowing a loop through directories to make this process faster
@@ -78,11 +81,11 @@ def fittingscript_func(sourcename):
     #Creating directories automatically
     #NOTE: 'Run.py' should be run BEFORE this
     
-    if os.path.exists(path2+'Line Properties/'+sourcename):
-        if not os.path.exists(path2+'Line Properties/'+sourcename+'/Fit Data/'):
-            os.makedirs(path2+'Line Properties/'+sourcename+'/Fit Data/')
-        if not os.path.exists(path2+'Line Properties/'+sourcename+'/Line Profile Plots/'):
-            os.makedirs(path2+'Line Properties/'+sourcename+'/Line Profile Plots/')
+    if os.path.exists(pathO+sourcename):
+        if not os.path.exists(pathO+sourcename+'/Fit Data/'):
+            os.makedirs(pathO+sourcename+'/Fit Data/')
+        if not os.path.exists(pathO+sourcename+'/Line Profile Plots/'):
+            os.makedirs(pathO+sourcename+'/Line Profile Plots/')
     
     # -----------------------------------------------------------------------------
     
@@ -131,7 +134,7 @@ def fittingscript_func(sourcename):
     # complexes since those will be used for finding velocity shifts
     
     # Path of line complex plots
-    path5 = path2+'Line Properties/'+sourcename+'/'
+    path5 = pathO+sourcename+'/'
                        
     # Plotting H_alpha coomplex
     plot_Ha = 'yes'  
@@ -149,7 +152,7 @@ def fittingscript_func(sourcename):
         plt.plot(q_mle.wave, q_mle.Manygauss(np.log(q_mle.wave), q_mle.gauss_result), 
                          'b', lw=2)
         plt.plot(q_mle.wave, q_mle.line_flux,'k')
-        plt.xlim(6300, 6900)
+        plt.xlim(6300, 7000)
         plt.xlabel(r'$\rm Rest \, Wavelength$ ($\rm \AA$)', fontsize = 20)
         plt.ylabel(r'$\rm f_{\lambda}$ ($\rm 10^{-17} erg\;s^{-1}\;cm^{-2}\;\AA^{-1}$)'
                    , fontsize = 20)
@@ -172,7 +175,7 @@ def fittingscript_func(sourcename):
         plt.plot(q_mle.wave, q_mle.Manygauss(np.log(q_mle.wave), q_mle.gauss_result), 
                  'b', lw=2)
         plt.plot(q_mle.wave, q_mle.line_flux,'k')
-        plt.xlim(4640, 5100)
+        plt.xlim(4640, 5300)
         plt.xlabel(r'$\rm Rest \, Wavelength$ ($\rm \AA$)', fontsize = 20)
         plt.ylabel(r'$\rm f_{\lambda}$ ($\rm 10^{-17} erg\;s^{-1}\;cm^{-2}\;\AA^{-1}$)'
                    , fontsize = 20)
@@ -388,7 +391,7 @@ def fittingscript_func(sourcename):
 #Now we can choose to loop through it
 # if loop is false, then you can specify the spectrum you want
 
-loop = False
+loop = True
 if loop: 
     for source in Data_list:
         fittingscript_func(source)

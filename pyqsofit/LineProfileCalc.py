@@ -44,11 +44,17 @@ def lineprofilecalc_func(sourcename):
     # sourcename is just the plateID-MJD-fiberID.
     # sourcename = '0646-52523-0075'
     
+    #path things
+    path1 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/'
+    # EMT: fitting control or outliers, for organization purposes  
+    pathC = path1+'/Line Properties/Control/'
+    pathO = path1+'/Line Properties/Outliers/'
+    
     # Path of stored PyQSOFit fit results
-    path = 'Fit Results/Line Properties/'+sourcename+'/Fit Data/'
+    path = pathO+sourcename+'/Fit Data/'
     
     # Path for saving results from this code
-    path2 = 'Fit Results/Line Properties/'+sourcename+'/'+'Line Profile Plots/'
+    path2 = pathO+sourcename+'/'+'Line Profile Plots/'
     
     # -----------------------------------------------------------------------------
     
@@ -396,7 +402,7 @@ def lineprofilecalc_func(sourcename):
         
 # ----------------------------------------------------------------------------------
 # Deciding to loop through all values or not
-loop = False
+loop = True
 if loop:
     for source in Data_list:
         lineprofilecalc_func(source)

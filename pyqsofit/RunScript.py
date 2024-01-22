@@ -33,6 +33,9 @@ path2 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/'
 path3 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/QA Other/'
 # The path of dust reddening map
 path4 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/sfddata/'
+# EMT: fitting control or outliers, for organization purposes  
+pathC = path2+'/Line Properties/Control/'
+pathO = path2+'/Line Properties/Outliers/'
 
 # -----------------------------------------------------------------------------
 # Allowing a loop through directories to make this process faster
@@ -63,10 +66,11 @@ def runscript_func(sourcename):
     # -----------------------------------------------------------------------------
     #Creating directories automatically from the sourcename
     #if not done so already
+    #be sure to change the path accordingly 
     
     
-    if not os.path.exists(path2+'Line Properties/'+sourcename):
-        os.makedirs(path2+'Line Properties/'+sourcename)
+    if not os.path.exists(pathO+sourcename):
+        os.makedirs(pathO+sourcename)
        
     
     # -----------------------------------------------------------------------------
@@ -157,11 +161,11 @@ def runscript_func(sourcename):
           # Initial jitter for every initial guass to avoid local minimum. (Under test, not recommanded to change)
 
           # customize the results
-          save_result=False,  # If True, all the fitting results will be saved to a fits file
+          save_result=True,  # If True, all the fitting results will be saved to a fits file
           save_fits_name=None,  # The output name of the result fits
           save_fits_path=path3,  # The output path of the result fits
           plot_fig=True,  # If True, the fitting results will be plotted
-          save_fig=False,  # If True, the figure will be saved
+          save_fig=True,  # If True, the figure will be saved
           plot_corner=True,  # Whether or not to plot the corner plot results if MCMC=True
 
           # debugging mode
@@ -169,7 +173,7 @@ def runscript_func(sourcename):
 
           # sublevel parameters for figure plot and emcee
           kwargs_plot={
-              'save_fig_path': '.',  # The output path of the figure
+              'save_fig_path': pathO,  # The output path of the figure
               'broad_fwhm'   : 1200  # km/s, lower limit that code decide if a line component belongs to broad component
           },
           kwargs_conti_emcee={},
@@ -201,7 +205,7 @@ def runscript_func(sourcename):
     # Obtain fit result files
     # Path of Line Properties Results for each system 
     
-    path5 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/Line Properties/'+sourcename+'/'
+    path5 = pathO+sourcename+'/'
     
     # this line does not play nice, EMT edit 1/8/24
     # data=fits.open(path3+sourcename+'.fits') 
@@ -381,7 +385,7 @@ def runscript_func(sourcename):
 #----------------------------------------------------------------------------------
 # Loop over the values using the function
 # you can CHOOSE to loop or to specify a spectrum 
-loop = False
+loop = True
 
 if loop:
     for source in Data_list:

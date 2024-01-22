@@ -277,7 +277,7 @@ for ngauss in range(1, ngauss_max):
     q.Fit(name=None, nsmooth=1, deredden=True, reject_badpix=False, wave_range=None, \
           wave_mask=None, decompose_host=True, host_prior=True, decomp_na_mask=True, npca_gal=5, npca_qso=10, qso_type='CZBIN1',\
           Fe_uv_op=True, poly=True, BC=False, rej_abs_conti=False, rej_abs_line=False, \
-          initial_guess=None, MCMC=True, nburn=20, nsamp=200, nthin=10, linefit=True, \
+          initial_guess=None, MCMC=False, nburn=20, nsamp=200, nthin=10, linefit=True, \
           save_result=False, plot_fig=False, verbose=False)
 
     mask_Ha_bic = q.line_result_name == '2_line_min_chi2'

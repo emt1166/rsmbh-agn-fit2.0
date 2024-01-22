@@ -1968,7 +1968,7 @@ class QSOFit():
             wave_eval, pp[3:6]) + self.F_poly_conti(wave_eval, pp[11:]) + self.Balmer_conti(wave_eval, pp[8:11])
 
         # Plot lines
-        if (self.linefit == True) & (len(self.line_result) > 0):
+        """if (self.linefit == True) & (len(self.line_result) > 0):
             # If errors are in the results
             if (self.MCMC == True or self.MC == True) and self.nsamp > 0:
                 mc_flag = 2
@@ -2045,9 +2045,9 @@ class QSOFit():
                                       self.all_comp_range[2 * c + 1]])
 
                 axn[1][c].text(0.02, 0.9, _pretty_name(self.uniq_linecomp_sort[c]), fontsize=20,
-                               transform=axn[1][c].transAxes)
+                                transform=axn[1][c].transAxes)
                 axn[1][c].text(0.02, 0.825, r'$\chi ^2_\nu=$' + str(np.round(float(self.comp_result[c * 7 + 4]), 2)),
-                               fontsize=12, transform=axn[1][c].transAxes)
+                                fontsize=12, transform=axn[1][c].transAxes)
 
                 # Broad line properties
                 if plot_br_prop == True:
@@ -2063,22 +2063,22 @@ class QSOFit():
                         self.fur_result[self.fur_result_name == f'{self.uniq_linecomp_sort[c]}_whole_br_area_err'][0]
 
                         axn[1][c].text(0.02, 0.75,
-                                       fr'$L_{{\rm{{br}}}}=10^{{{{{np.round(np.log10(self.flux2L(area)), 2)}}}\pm{{{np.round(0.434 * self.flux2L(area_err) / self.flux2L(area), 2)}}}}}$' + r'$\ \rm{erg}\ \rm{s}^{-1}$',
-                                       fontsize=12, transform=axn[1][c].transAxes)
+                                        fr'$L_{{\rm{{br}}}}=10^{{{{{np.round(np.log10(self.flux2L(area)), 2)}}}\pm{{{np.round(0.434 * self.flux2L(area_err) / self.flux2L(area), 2)}}}}}$' + r'$\ \rm{erg}\ \rm{s}^{-1}$',
+                                        fontsize=12, transform=axn[1][c].transAxes)
                         axn[1][c].text(0.02, 0.675,
-                                       fr'${{\rm{{FWHM}}}}_{{\rm{{br}}}}={{{int(np.round(fwhm, 0))}}}\pm{{{int(np.round(fwhm_err, 0))}}}$' + r'$\ \rm{km}\ \rm{s}^{-1}$',
-                                       fontsize=12, transform=axn[1][c].transAxes)
+                                        fr'${{\rm{{FWHM}}}}_{{\rm{{br}}}}={{{int(np.round(fwhm, 0))}}}\pm{{{int(np.round(fwhm_err, 0))}}}$' + r'$\ \rm{km}\ \rm{s}^{-1}$',
+                                        fontsize=12, transform=axn[1][c].transAxes)
 
                     else:
                         axn[1][c].text(0.02, 0.75,
-                                       fr'$L_{{\rm{{br}}}}=10^{{{np.round(np.log10(self.flux2L(area)), 1)}}}$' + r'$\ \rm{erg}\ \rm{s}^{-1}$',
-                                       fontsize=12, transform=axn[1][c].transAxes)
+                                        fr'$L_{{\rm{{br}}}}=10^{{{np.round(np.log10(self.flux2L(area)), 1)}}}$' + r'$\ \rm{erg}\ \rm{s}^{-1}$',
+                                        fontsize=12, transform=axn[1][c].transAxes)
                         axn[1][c].text(0.02, 0.675,
-                                       fr'${{\rm{{FWHM}}}}_{{\rm{{br}}}}={{{int(np.round(fwhm, 0))}}}$' + r'$\ \rm{km}\ \rm{s}^{-1}$',
-                                       fontsize=12, transform=axn[1][c].transAxes)
+                                        fr'${{\rm{{FWHM}}}}_{{\rm{{br}}}}={{{int(np.round(fwhm, 0))}}}$' + r'$\ \rm{km}\ \rm{s}^{-1}$',
+                                        fontsize=12, transform=axn[1][c].transAxes)
 
                     axn[1][c].text(0.02, 0.6, fr'$S/N_{{\rm{{br}}}}={np.round(snr, 1)}$',
-                                   fontsize=12, transform=axn[1][c].transAxes)
+                                    fontsize=12, transform=axn[1][c].transAxes)
 
                 # Wave mask
                 if self.wave_mask is not None:
@@ -2106,7 +2106,7 @@ class QSOFit():
                         if plot_residual:
                             axn[1][c].axhline(-5, color='k', zorder=0, lw=0.5)
                             axn[1][c].plot(self.wave[mask], self.line_flux[mask] - self.f_line_model[mask] - 5, 'gray',
-                                           label=label_resid, linestyle='dotted', lw=1, zorder=3)
+                                            label=label_resid, linestyle='dotted', lw=1, zorder=3)
                 else:
 
                     axn[1][c].plot(self.wave, self.line_flux, 'k', label='data', lw=1, zorder=2)
@@ -2115,13 +2115,53 @@ class QSOFit():
                     if plot_residual:
                         axn[1][c].axhline(-5, color='k', zorder=0, lw=0.5)
                         axn[1][c].plot(self.wave, self.line_flux - self.f_line_model - 5, 'gray',
-                                       label='resid', linestyle='dotted', lw=1, zorder=3)
+                                        label='resid', linestyle='dotted', lw=1, zorder=3)
         else:
             # If no lines are fitted, there would be only one row
-            fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(15, 5))
+            fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(15, 5))"""
 
         # End line complex subplots
-
+        
+# LIZA ADDED THE FOLLOWING BECAUSE WE DISLIKE THE SECOND ROW, WE DONT NEED IT, 11/29/2022 --------------------------------------------------------------------------------------------------
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(18,8))  
+        if self.linefit == True:
+            # If errors are in the results
+            if (self.MCMC == True or self.MC == True) and self.nsamp > 0:
+                mc_flag = 2
+            else:
+                mc_flag = 1
+                
+        self.f_line_narrow_model = np.zeros_like(self.wave)
+        self.f_line_br_model = np.zeros_like(self.wave)
+        lines_total = np.zeros_like(wave_eval)
+        line_order = {'r': 3, 'g': 7}  # Ensure narrow lines plot above the broad lines
+        
+        # For each Gaussian line component
+        for p in range(len(self.gauss_result)//(mc_flag*3)):
+            gauss_result_p = self.gauss_result[p*3*mc_flag:(p + 1)*3*mc_flag:mc_flag]
+            
+            # Broad or narrow line check
+            if self.CalFWHM(self.gauss_result[(2 + p*3)*mc_flag]) < broad_fwhm:
+                # Narrow
+                color = 'g'
+                self.f_line_narrow_model += self.Onegauss(np.log(self.wave), gauss_result_p)
+            else:
+                # Broad
+                color = 'r'
+                self.f_line_br_model += self.Onegauss(np.log(self.wave), gauss_result_p)
+            
+            # Evaluate the line component
+            line_single = self.Onegauss(np.log(wave_eval), gauss_result_p)
+            #self.f_line_model += self.Onegauss(np.log(wave), gauss_result_p)
+            # Plot the line component
+            ax.plot(wave_eval, line_single + f_conti_model_eval, color=color, zorder=5)
+                
+            lines_total += line_single
+        
+        # Supplement the emission lines in the first subplot
+        ax.plot(wave_eval, lines_total + f_conti_model_eval, 'b', label='line', zorder=line_order[color])
+            
+# END LIZA EDITS ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         # Main figure
         if self.wave_mask is not None:
 
