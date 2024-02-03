@@ -120,6 +120,13 @@ else:
     SNR_cut('2031-53848-0060') 
 
 #----------------------------------------------------------------------------------------------------------------------
+# Now we need to take a look at our SNR and decide an appropriate cut
+# this will also involve some trial and error and is kind of subjective... 
+# I will try to use stats to do it (maybe quartile ranges?)
+
+
+
+
 '''
 Now that the initial calculation is done, we have some options:
     1) Focus on Halpha and Hbeta regions of interest and do SNR cut
@@ -130,7 +137,6 @@ Now that the initial calculation is done, we have some options:
     This means averaging it would not be the best idea.... 
 I will attempt Option #1. 
 '''
-
 
 '''
 Okay because the length for wavelengths and error are the same, I am sure I can isolate Halpha and Hbeta 

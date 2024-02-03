@@ -385,7 +385,7 @@ def runscript_func(sourcename):
 #----------------------------------------------------------------------------------
 # Loop over the values using the function
 # you can CHOOSE to loop or to specify a spectrum 
-loop = True
+loop = False
 
 if loop:
     for source in Data_list:
