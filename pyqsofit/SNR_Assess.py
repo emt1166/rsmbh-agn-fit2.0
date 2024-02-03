@@ -21,8 +21,28 @@ the flux of a given wavelength bin.
 The goal of this is to determine what may be affecting our final measurements. 
 A lot of these lower luminosity quasar spectra (Liu et al. 2019) are lower SNR by nature. 
 
-"""
+----------------------------------------------------------------------------------------------------------
+Turns out, there is a built-in function called random.gauss(). 
+Inputs of random.gauss() are mu, sigma.
+mu is the mean
+sigma is the standard deviation
 
+This function can be used to choose a random number in a gaussian distribution, and therefore
+can be used to manipulate SDSS spectra. 
+
+Here, our mu, the mean, is going to be the binned flux measurement. 
+The sigma, is going to be the standard deviation, error, or uncertainty defined by SDSS. 
+In this case, it is a "one sigma" uncertainty (or error). 
+
+The plan:
+    1) Use random.gauss() to pick out a value to replace the recorded flux value with
+    2) Loop this process through every wavelength bin, effectively replacing all flux values
+    with new ones, and introducing an increased S/N
+    3) Compare the line profile properties to see what is happening when S/N is changed 
+
+
+"""
+#code
 import statistics as stat
 import numpy as np
 import matplotlib.pyplot as plt
@@ -41,69 +61,85 @@ path1 = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/'
 Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers'
 Data_list_names = os.listdir(Data_path) 
 
-sourcename='1624-53386-0032'
+
+#Will input a LOOP here eventually -----------------------------------------------------------------------------------
+
+#Pattern to extract the desired number sequence
+pattern = r'spec-(\d{4}-\d{5}-\d{4})\.fits'
+
+# Initialize an empty list to store the extracted sequences
+Data_list = []
+
+# Iterate through the file names and extract the sequences
+for name in Data_list_names:
+    match = re.search(pattern, name)
+    if match:
+        number_sequence = match.group(1)
+        Data_list.append(number_sequence)
+
+#sourcename='1624-53386-0032'
 #this source is one of the highest SNR
 
-data = fits.open(os.path.join(path1+'Data/Outliers/spec-'+sourcename+'.fits'))
-lam = 10**data[1].data['loglam']                           # OBS wavelength (A)
-flux = data[1].data['flux']                           # OBS flux (erg/s/cm^2/A)
-err = 1./np.sqrt(data[1].data['ivar'])                          # 1 sigma error
+def Input_SN(sourcename):
 
-SNR_calc = flux/err #SNR calc
+    data = fits.open(os.path.join(path1+'Data/Outliers/spec-'+sourcename+'.fits'))
+    lam = 10**data[1].data['loglam']                           # OBS wavelength (A)
+    flux = data[1].data['flux']                           # OBS flux (erg/s/cm^2/A)
+    err = 1./np.sqrt(data[1].data['ivar'])                          # 1 sigma error
+    
+    #SNR_calc = flux/err #SNR calc if needed
+    
+    new_flux = []
+    i = 0
+    while i < len(flux):
+        coeff_err = np.random.randint(1,2)#sets how noisy it is
+        f = random.gauss(flux[i],coeff_err*err[i])
+        new_flux.append(f)
+        if i > len(flux):
+            break
+        i +=1 
+    
+    #plt.figure()
+    #plt.plot(lam,flux, label='Orig. Spec')
+    #plt.plot(lam, new_flux, label='Manip. Spec')
+    #plt.xlim(6300,7000)
+    #plt.legend()
+    
+    
+    '''
+    Now we need to save these as a usable spectrum to do the rest of the pyqso
+    fitting process, just like with the organic spectrum from SDSS.
+    
+    I think all you have to do is input the new_flux array and let it run... 
+    I am going to save the new_flux array somewhere and have it pull from that. 
+    Much easier than manipulating everything at once, just change the paths. 
+    
+    
+    I will make a new folder to save all of the new_flux results in, and make sure to
+    identify them using the sourcename. Outliers New Flux is the folder, in the Data folder. 
+    '''
+    
+    #saving the new_flux arrays to be used
+    
+    #setting the path to the new flux arrays (introducing random excess noise)
+    new_flux_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers New Flux'
+    #specific placement for the degree of noise introduced (defined by coeff_err)
+    snr_degree1 = new_flux_path+'/1'
+    snr_degree5 = new_flux_path+'/1-5'
+    snr_degree10 = new_flux_path+'/1-10'
+    snr_degree20 = new_flux_path+'/10-20'
+    #saving the file to the appropriate folder
+    np.savetxt(snr_degree1+'/'+sourcename+'.new_flux.txt', new_flux)
+    
+    return 
 
-'''
-Turns out, there is a built-in function called random.gauss(). 
-Inputs of random.gauss() are mu, sigma.
-mu is the mean
-sigma is the standard deviation
-
-This function can be used to choose a random number in a gaussian distribution, and therefore
-can be used to manipulate SDSS spectra. 
-
-Here, our mu, the mean, is going to be the binned flux measurement. 
-The sigma, is going to be the standard deviation, error, or uncertainty defined by SDSS. 
-In this case, it is a "one sigma" uncertainty (or error). 
-
-The plan:
-    1) Use random.gauss() to pick out a value to replace the recorded flux value with
-    2) Loop this process through every wavelength bin, effectively replacing all flux values
-    with new ones, and introducing an increased S/N
-    3) Compare the line profile properties to see what is happening when S/N is changed 
-'''
-
-
-#print(random.gauss(flux,err))
-
-# plt.figure()
-# plt.plot(lam,flux, label='OG Spectrum')
-# plt.plot(lam, random.gauss(flux,err), label='Manipulated Spectrum')
-# plt.xlim(6000,7000)
-# plt.legend()
-
-#need to make it so that the random.gauss() is NOT the same for each flux value
-#this will require a simple for loop
-
-
-new_flux = []
-i = 0
-while i < len(flux):
-    coeff_err = np.random.randint(1,11)#sets how noisy it is
-    f = random.gauss(flux[i],coeff_err*err[i])
-    new_flux.append(f)
-    if i > len(flux):
-        break
-    i +=1 
-
-#np.savetxt(path1+'new_flux.txt', new_flux)
-plt.figure()
-plt.plot(lam,flux, label='Orig. Spec')
-plt.plot(lam, new_flux, label='Manip. Spec')
-plt.xlim(6300,7000)
-plt.legend()
-#okay now we have it so the SN is changed by different amounts across the spec
-#what if I do different multiples of the error?? (10*error gives a BAD SNR...)
-'''
-
+# Add choice of loop ------------------------------------------------------------------------------------------------
+loop = True
+if loop: 
+    for source in Data_list:
+        Input_SN(source)
+else:
+    Input_SN('1624-53386-0032')
 
 
 
