@@ -50,8 +50,12 @@ def SNR_cut(sourcename):
     lam = 10**data[1].data['loglam']                           # OBS wavelength (A)
     flux = data[1].data['flux']                           # OBS flux (erg/s/cm^2/A)
     err = 1./np.sqrt(data[1].data['ivar'])                          # 1 sigma error
+    new_flux_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers New Flux/10-20/'+sourcename+'.new_flux.txt'
+    synthetic_flux = np.loadtxt(new_flux_path)
     
-    SNR_calc = flux/err #SNR calc
+    
+    coeff_err = np.random.randint(1,2) #sets how noisy it is, might need to coordinate this
+    SNR_calc = synthetic_flux/err #SNR calc
     #print(len(lam))
        
     #saving each SNR calculation by sourcename
@@ -71,39 +75,39 @@ def SNR_cut(sourcename):
     print(r'The total SNR is', stat.mean(SNR_file))
     
     
-    #need a way to sort the SNR of all outliers
-    #save the calculations into their own file
-    #organized by sourcename, and all three SNR calculations
-    h_beta_mean_snr = stat.mean(SNR_file[1970:2580])
-    h_alpha_mean_snr = stat.mean(SNR_file[3260:3770])
-    total_snr = stat.mean(SNR_file)
-    sourcename = f'{sourcename}'
+    # #need a way to sort the SNR of all outliers
+    # #save the calculations into their own file
+    # #organized by sourcename, and all three SNR calculations
+    # h_beta_mean_snr = stat.mean(SNR_file[1970:2580])
+    # h_alpha_mean_snr = stat.mean(SNR_file[3260:3770])
+    # total_snr = stat.mean(SNR_file)
+    # sourcename = f'{sourcename}'
     
-    # Creating a DataFrame
-    new_data = {
-        'Sourcename': f'{sourcename}',
-        'H beta mean SNR': [h_beta_mean_snr],
-        'H alpha mean SNR': [h_alpha_mean_snr],
-        'Total SNR': [total_snr]
-    }
+    # # Creating a DataFrame
+    # new_data = {
+    #     'Sourcename': f'{sourcename}',
+    #     'H beta mean SNR': [h_beta_mean_snr],
+    #     'H alpha mean SNR': [h_alpha_mean_snr],
+    #     'Total SNR': [total_snr]
+    # }
     
-    # Check if the output CSV file exists
-    output_csv_path = 'SNR_output.csv'
-    if os.path.exists(output_csv_path):
-        # If it exists, read the existing DataFrame
-        existing_df = pd.read_csv(output_csv_path)
-        # Append the new data to the existing DataFrame
-        df = pd.concat([existing_df, pd.DataFrame(new_data)], ignore_index=True)
-    else:
-        # If it doesn't exist, create a new DataFrame with the new data
-        df = pd.DataFrame(new_data)
+    # # Check if the output CSV file exists
+    # output_csv_path = 'SNR_output.csv'
+    # if os.path.exists(output_csv_path):
+    #     # If it exists, read the existing DataFrame
+    #     existing_df = pd.read_csv(output_csv_path)
+    #     # Append the new data to the existing DataFrame
+    #     df = pd.concat([existing_df, pd.DataFrame(new_data)], ignore_index=True)
+    # else:
+    #     # If it doesn't exist, create a new DataFrame with the new data
+    #     df = pd.DataFrame(new_data)
 
-    # Writing to CSV file
-    df.to_csv(output_csv_path, index=False)
+    # # Writing to CSV file
+    # df.to_csv(output_csv_path, index=False)
 
    
     plt.figure() #plots spec and SNR calc to see comparison 
-    plt.plot(lam,flux, label='spec')
+    plt.plot(lam,synthetic_flux, label='spec')
     plt.plot(lam,SNR_calc, color='orange', label='snr')
     plt.title(f'{sourcename}')
     plt.xlabel('wavelength (Ang)')
@@ -112,12 +116,12 @@ def SNR_cut(sourcename):
     return
 
 #allowing CHOICE of loop, say False if you only want to look at a particular source    
-loop = True
+loop = False
 if loop: 
     for source in Data_list:
         SNR_cut(source)
 else:
-    SNR_cut('2031-53848-0060') 
+    SNR_cut('2974-54592-0229') 
 
 #----------------------------------------------------------------------------------------------------------------------
 # Now we need to take a look at our SNR and decide an appropriate cut

@@ -161,6 +161,7 @@ def fittingscript_func(sourcename):
     
     
     # Plotting broad H_beta and [OIII] line complex
+    # EMT Note: Need caveat due to [OIII] wings frequently fit as BLR, not NLR... --------
     plot_Hb = 'yes'
     if(plot_Hb =='yes'):
         fig2 = plt.figure(figsize=(16,12))
@@ -398,6 +399,10 @@ if loop:
 else:
     fittingscript_func('0332-52367-0639')    
     
+# -----------------------------------------------------------------------------
+# Want a way to fit a spectrum multiple times for comparison purposes
+# will probably write an entirely new script tbh 
+
     
     
 

@@ -10,6 +10,11 @@ The parameters here have been edited to reflect the best fitting results from
 trial and error with many different spectra. 
 They can be edited further to fit particularily difficult/weird spectra. 
 
+In order, the columns for the file are:
+lambda, label, lower bound, upper boun,  n_gauss,
+initial flux scale guess, lower flux, upper flux,
+initial guess of line sigma (ln lambda), lower range, upper range,
+v offset from centroid, vindex(tying), windex(tying), findex(tying), fvalue, var.
 """
 import numpy as np
 import sys, os
@@ -23,7 +28,7 @@ warnings.filterwarnings("ignore")
 path_ex='/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit'
 #EMT edited the range values to better constrain them
 newdata = np.rec.array([
-(6564.61, r'H$\alpha$', 6350, 6800, 'Ha_br',     4,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.015, 0, 0, 0, 0.05,    1),
+(6564.61, r'H$\alpha$', 6350, 6800, 'Ha_br',     3,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.015, 0, 0, 0, 0.05,    1),
 (6564.61, r'H$\alpha$', 6500, 6600, 'Ha_na',     1,   0.1, 0.0, 1e10,   1e-3, 5e-4,   0.001,   0.01,  1, 1, 0, 0.002,   1),
 (6549.85, r'H$\alpha$', 6500, 6600, 'NII6549',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   5e-3,  1, 2, 1, 0.001,   1),
 (6585.28, r'H$\alpha$', 6500, 6630, 'NII6585',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   5e-3,  1, 2, 1, 0.003,   1),
@@ -36,12 +41,12 @@ newdata = np.rec.array([
 (5877.29, 'HeI', 5800, 5920, 'HeI5877_br',      1,    0.1, 0.0, 1e10,   5e-3, 0.004, 0.05,      0.015, 0, 0, 0, 0.001,   1), # Added on November 30, 2022 
 # end of Liza Matrecito edits
 
-(4862.68, r'H$\beta$', 4650, 5100, 'Hb_br',       4,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.01, 0, 0, 0, 0.01,    1),
+(4862.68, r'H$\beta$', 4650, 5100, 'Hb_br',       3,   0.1, 0.0, 1e10,   5e-3, 0.004,  0.05,     0.01, 0, 0, 0, 0.01,    1),
 (4862.68, r'H$\beta$', 4800, 4910, 'Hb_na',       1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   0.01, 1, 1, 0, 0.002,   1),
-(4960.30, r'H$\beta$', 4920, 5100, 'OIII4959c',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   0.01, 1, 1, 1, 0.33,    1),
-(5008.24, r'H$\beta$', 4960, 5100, 'OIII5007c',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.001,   0.01, 1, 1, 1, 1,       1),
-(4960.30, r'H$\beta$', 4910, 5000, 'OIII4959w',   1,   0.1, 0.0, 1e10,   3e-3, 2.3e-4, 0.003,    0.01, 2, 2, 2, 0.33,    1),
-(5008.24, r'H$\beta$', 4960, 5080, 'OIII5007w',   1,   0.1, 0.0, 1e10,   3e-3, 2.3e-4, 0.003,    0.01, 2, 2, 2, 1,       1),
+(4960.30, r'H$\beta$', 4920, 5100, 'OIII4959c',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.0015,   0.01, 1, 1, 1, 0.33,    1),
+(5008.24, r'H$\beta$', 4960, 5100, 'OIII5007c',   1,   0.1, 0.0, 1e10,   1e-3, 2.3e-4, 0.0015,   0.01, 1, 1, 1, 1,       1),
+(4960.30, r'H$\beta$', 4910, 5000, 'OIII4959w',   1,   0.1, 0.0, 1e10,   3e-3, 2.3e-4, 0.00355,    0.01, 2, 2, 2, 0.33,    1),
+(5008.24, r'H$\beta$', 4960, 5080, 'OIII5007w',   1,   0.1, 0.0, 1e10,   3e-3, 2.3e-4, 0.00355,    0.01, 2, 2, 2, 1,       1),
 #(4687.02, r'H$\beta$', 4640, 5100, 'HeII4687_br', 1, 0.1, 0.0, 1e10, 5e-3, 0.004,  0.05,   0.005, 0, 0, 0, 0.001, 1),
 #(4687.02, r'H$\beta$', 4640, 4700, 'HeII4687_na', 1,   0.1, 0.0, 1e10, 1e-3, 2.3e-4, 0.0017, 0.005, 1, 1, 0, 0.001,      1),
 

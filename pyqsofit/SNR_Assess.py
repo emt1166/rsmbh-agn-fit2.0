@@ -92,19 +92,13 @@ def Input_SN(sourcename):
     new_flux = []
     i = 0
     while i < len(flux):
-        coeff_err = np.random.randint(1,2)#sets how noisy it is
-        f = random.gauss(flux[i],coeff_err*err[i])
+        #coeff_err = np.random.randint(1,11)#sets how noisy it is, will change to np.random prob
+        f = random.gauss(flux[i],1*err[i])
+        #print(i, f)
         new_flux.append(f)
         if i > len(flux):
             break
         i +=1 
-    
-    #plt.figure()
-    #plt.plot(lam,flux, label='Orig. Spec')
-    #plt.plot(lam, new_flux, label='Manip. Spec')
-    #plt.xlim(6300,7000)
-    #plt.legend()
-    
     
     '''
     Now we need to save these as a usable spectrum to do the rest of the pyqso
@@ -128,18 +122,27 @@ def Input_SN(sourcename):
     snr_degree5 = new_flux_path+'/1-5'
     snr_degree10 = new_flux_path+'/1-10'
     snr_degree20 = new_flux_path+'/10-20'
-    #saving the file to the appropriate folder
-    np.savetxt(snr_degree1+'/'+sourcename+'.new_flux.txt', new_flux)
+    TEST = new_flux_path+'/TEST'
+    #saving the file to the appropriate folder, with ID name
+    np.savetxt(TEST+'/'+sourcename+'.new_flux.txt', new_flux)
+    
+    plt.figure()
+    plt.plot(lam,flux, label='Orig. Spec')
+    plt.plot(lam, new_flux, label='Manip. Spec')
+    plt.xlim(6200,7000)
+    plt.legend()
+    
+    
     
     return 
 
 # Add choice of loop ------------------------------------------------------------------------------------------------
-loop = True
+loop = False
 if loop: 
     for source in Data_list:
         Input_SN(source)
 else:
-    Input_SN('1624-53386-0032')
+    Input_SN('0332-52367-0639')
 
 
 
