@@ -16,164 +16,174 @@ I created this to be used with pyQSOfit outputs.
 import numpy as np
 import os
 import csv
+import re
 
-#set path to specific object
+#set path to the output files
 #NOTE: these change depending on your set-up
-Object = '1305-52757-0281'
-Object_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Fit Results/Line Properties/Outliers'
 
-#set path to the output .txt file
-#NOTE this changes based on your set-up
-FWHM_path = Object_path+'/'+Object+'/'+Object+'_LineProperties.txt'
-VShift_path = Object_path+'/'+Object+'/Line Profile Plots/'+Object+'_BLV-Shifts.txt'
+# The path of the SNR New Flux Comparison Data
+pathF = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers New Flux/LOOP1/'
+Data_path = '/Users/emilytemple/documents/rsmbh-agn-fit2.0/pyqsofit/Data/Outliers'
+Data_list_names = os.listdir(Data_path) 
 
-#Now we want to access a specific value in each file
-#This will give us the specific value we want 
+#Pattern to extract the desired number sequence
+pattern = r'spec-(\d{4}-\d{5}-\d{4})\.fits'
 
-#For FWHM text file-----------------------------------------------------------
-Object_dict = {}
+# Initialize an empty list to store the extracted sequences
+Data_list = []
 
-with open(FWHM_path, 'r') as fp:
-    current_h_line = ''
-    for i, line in enumerate(fp):
-        if i < 2:
-            continue
-        line_text = line.strip()
-        if line_text.endswith(':'):
-            h_line = line_text.strip(':')
-            Object_dict[h_line] = {}
-            current_h_line = h_line
-        else:
-            line_values = line_text.split()
-            agn_prop = line_values[0]
-            agn_value = line_values[2]
-            Object_dict[current_h_line][agn_prop] = agn_value
-            
-#print(Object_dict)
-#print(Object_dict['Broad H_beta']['FWHM'])
-#--------------------------------------------------------------------------
+# Iterate through the file names and extract the sequences
+for name in Data_list_names:
+    match = re.search(pattern, name)
+    if match:
+        number_sequence = match.group(1)
+        Data_list.append(number_sequence)
 
-#For VShift text file ------------------------------------------------------
-VObject_dict = {}
-
-with open(VShift_path, 'r') as fp:
-    for i, line in enumerate(fp):
-        if i < 2:
-            continue
-        line_text = line.strip()
-        line_values = line_text.split(' = ')
-        if len(line_values) < 2:
-            continue
-        agn_prop = line_values[0]
-        agn_value = line_values[1].split()[0]
-        VObject_dict[agn_prop] = agn_value
-
-#print(VObject_dict)
-#print(VObject_dict['Peak H_alpha Velocity Shift'])
-
-
-#----------------------------------------------------------------------------
-"""
-Now that we know this works for a single object, we want multiple objects
-Let's put the ID's of the ones we want in a list format
-Then, we can loop throughout that list
-"""
-
-#Defining a list of objects
-#I think if I can automate this as much as possible, it'll be easier
-
-Object_list = []
-Object_names = os.listdir(Object_path)
-#print(Object_names)
-
-
-for object_name in Object_names:
-    if object_name != '.DS_Store' and not object_name.endswith('.pdf'):
-        Object_list.append(object_name)
-
-#print(Object_list)
-
-import csv
-
-# Create a list to store the data
-#these are for the two different .txt files we have right now
-LineProfiles_output_data = []
-LineShifts_output_data = []
-
-for n in Object_list:
-    FWHM_path_all = Object_path+'/'+n+'/'+n+'_LineProperties.txt'
-    VShift_path_all = Object_path+'/'+n+'/Line Profile Plots/'+n+'_BLV-Shifts.txt'
-
-    with open(FWHM_path_all, 'r') as fp:
-        current_h_line = ''
-        for i, line in enumerate(fp):
-            if i < 2:
-                continue
-            line_text = line.strip()
-            if line_text.endswith(':'):
-                h_line = line_text.strip(':')
-                Object_dict[h_line] = {}
-                current_h_line = h_line
-            else:
-                line_values = line_text.split()
-                agn_prop = line_values[0]
-                agn_value = line_values[2]
-                Object_dict[current_h_line][agn_prop] = agn_value
-
-
-    with open(VShift_path_all, 'r') as fp:
-        for i, line in enumerate(fp):
-            if i < 2:
-                continue
-            line_text = line.strip()
-            line_values = line_text.split(' = ')
-            if len(line_values) < 2:
-                continue
-            agn_prop = line_values[0]
-            agn_value = line_values[1].split()[0]
-            VObject_dict[agn_prop] = agn_value
+# -----------------------------------------------------------------------------------------------
+def output_file(sourcename):
+    Output_path = pathF+sourcename+'/' #path to the output files per sourcename
+    
+    #eventually will input another loop here to go over allll flux iterations using j instead of n
+    j = 0 #this will change based on which iteration of flux we want to look at
+    FWHM_path = Output_path+sourcename+'.'+f'{j}'+"_LineProperties.txt"
+    VShift_path = Output_path+sourcename+'.'+f'{j}'+"_BLV-Shifts.txt"
+    
+    #----------------------------------------------------------------------------
+    
+   
+    """
+    Let's put the ID's of the ones we want in a list format
+    Then, we can loop throughout that list
+    """
+    
+    #Defining a list of the sourcenames in Object_list
+    
+    Object_list = []
+    Object_names = os.listdir(pathF)
+    
+    
+    for object_name in Object_names:
+        if object_name != '.DS_Store' and not object_name.endswith('.pdf'):
+            Object_list.append(object_name)
+    
+    
+    # Create a list to store the data
+    #these are for the two different .txt files we have right now
+    LineProfiles_output_data = []
+    LineShifts_output_data = []
+    
+    for n in Object_list: #for the sourcenames in the object list
+        FWHM_path_all = pathF+n+'/'+n+'.'+f'{j}'+"_LineProperties.txt"
+        VShift_path_all = pathF+n+'/'+n+'.'+f'{j}'+"_BLV-Shifts.txt"
+    
+        Object_dict = {}
         
-        fwhm_data = {'Object ID': n, 'FWHM BHA': Object_dict['Broad H_alpha']['FWHM'],
-                     'FWHM BHB': Object_dict['Broad H_beta']['FWHM']}
+        with open(FWHM_path_all, 'r') as fp:
+            current_h_line = ''
+            for i, line in enumerate(fp):
+                line_text = line.strip()
+                if i < 2 or line_text == '':
+                    continue
+                if line_text.endswith(':'):
+                    h_line = line_text.strip(':')
+                    Object_dict[h_line] = {}
+                    current_h_line = h_line
+                else:
+                    line_values = line_text.split()
+                    agn_prop = line_values[0]
+                    agn_value = line_values[2]
+                    Object_dict[current_h_line][agn_prop] = agn_value
+        
+        # Extract relevant properties for FWHM
+        fwhm_data = {
+            'Object ID': n,
+            'FWHM BHA': Object_dict.get('Broad H_alpha', {}).get('FWHM', ''),
+            'FWHM BHB': Object_dict.get('Broad H_beta', {}).get('FWHM', '')
+        }
+        
+        # Append the extracted data to a list
         LineProfiles_output_data.append(fwhm_data)
+            
+        VObject_dict = {}
         
-        vshift_data = {'Object ID': n, 'VShift Peak BHA': VObject_dict['Peak H_alpha Velocity Shift'],
-                       'Kurtosis BHA': VObject_dict['H_alpha Kurtosis'], 
-                       'VShift Center BHA':VObject_dict['Center H_alpha Velocity Shift'],
-                       'BHA Asymmetry': VObject_dict['H_alpha Asymmetry'],
-                       'VShift Peak BHB': VObject_dict['Peak H_beta Velocity Shift'],
-                       'VShift Center BHB':VObject_dict['Center H_beta Velocity Shift'],
-                       'Kurtosis BHB': VObject_dict['H_beta Kurtosis'],
-                       'BHB Asymmetry': VObject_dict['H_beta Asymmetry']}
+        # Open and read the file
+        with open(VShift_path_all, 'r') as fp:
+            # Read line by line
+            for i, line in enumerate(fp):
+                # Skip the first two lines
+                if i < 2:
+                    continue
+                
+                # Remove leading/trailing whitespace
+                line_text = line.strip()
+                
+                # Split the line by ' = ' to extract property and value
+                line_values = line_text.split(' = ')
+                
+                # Skip lines without property-value pairs
+                if len(line_values) < 2:
+                    continue
+                
+                # Extract property and value
+                agn_prop = line_values[0].strip()
+                agn_value = line_values[1].split()[0]
+                
+                # Store the property and value in the dictionary
+                VObject_dict[agn_prop] = agn_value
+        
+        # Extract data and append to a list
+        vshift_data = {
+            'Object ID': n,
+            'VShift Peak BHA': VObject_dict.get('Peak H_alpha Velocity Shift', ''),
+            'Kurtosis BHA': VObject_dict.get('H_alpha Kurtosis', ''), 
+            'VShift Center BHA': VObject_dict.get('Center H_alpha Velocity Shift', ''),
+            'BHA Asymmetry': VObject_dict.get('H_alpha Asymmetry', ''),
+            'VShift Peak BHB': VObject_dict.get('Peak H_beta Velocity Shift', ''),
+            'VShift Center BHB': VObject_dict.get('Center H_beta Velocity Shift', ''),
+            'Kurtosis BHB': VObject_dict.get('H_beta Kurtosis', ''),
+            'BHB Asymmetry': VObject_dict.get('H_beta Asymmetry', '')
+        }
+        
+        # Append the extracted data to a list
         LineShifts_output_data.append(vshift_data)
-
-# Specify the CSV file path
-#there are two here because I wanted to separate some of the params for now
-#Can change this later
-csv_file_path1 = 'OutliersLineProfiles_output_data2.0.csv'
-csv_file_path2 = 'OutliersLineShifts_output_data2.0.csv'
-
-# Write the data to the CSV file
-with open(csv_file_path1, 'w', newline='') as csv_file:
-    fieldnames = ['Object ID', 'FWHM BHA','FWHM BHB']
-    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    # Write the header
-    writer.writeheader()
-    # Write the data
-    writer.writerows(LineProfiles_output_data)
-
-
-with open(csv_file_path2, 'w', newline='') as csv_file:
-    fieldnames = ['Object ID', 'VShift Peak BHA', 'Kurtosis BHA', 'VShift Center BHA', 'BHA Asymmetry',
-                  'VShift Peak BHB', 'VShift Center BHB','Kurtosis BHB', 'BHB Asymmetry']
-    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    # Write the header
-    writer.writeheader()
-    # Write the data
-    writer.writerows(LineShifts_output_data)
+        
+        # Specify the CSV file path
+        #there are two here because I wanted to separate some of the params for now
+        #Can change this later
+        csv_file_path1 = 'SN_LineProfiles_outputTEST.csv'
+        csv_file_path2 = 'SN_LineShifts_outputTEST.csv'
+        
+        # Write the data to the CSV file
+        with open(csv_file_path1, 'w', newline='') as csv_file:
+            fieldnames = ['Object ID', 'FWHM BHA','FWHM BHB']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            # Write the header
+            writer.writeheader()
+            # Write the data
+            writer.writerows(LineProfiles_output_data)
+        
+        
+        with open(csv_file_path2, 'w', newline='') as csv_file:
+            fieldnames = ['Object ID', 'VShift Peak BHA', 'Kurtosis BHA', 'VShift Center BHA', 'BHA Asymmetry',
+                          'VShift Peak BHB', 'VShift Center BHB','Kurtosis BHB', 'BHB Asymmetry']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            # Write the header
+            writer.writeheader()
+            # Write the data
+            writer.writerows(LineShifts_output_data)
+            return
+        return 
 
 #------------------------------------------------------------------------------
-        
+#ADDING CHOICE OF LOOP NOT WORKING RIGHT NOW
+loop = True
+if loop:
+    for source in Data_list:
+        output_file(source)
+else:
+    output_file('0813-52354-0561') 
+
+      
 """
 The .csv files produced from this can then be used to analyze the results
 from the two .txt output files produced by the code. 

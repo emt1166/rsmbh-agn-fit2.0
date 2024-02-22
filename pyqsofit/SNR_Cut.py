@@ -55,7 +55,7 @@ def SNR_cut(sourcename):
     
     
     coeff_err = np.random.randint(1,2) #sets how noisy it is, might need to coordinate this
-    SNR_calc = synthetic_flux/err #SNR calc
+    SNR_calc = flux/err #SNR calc
     #print(len(lam))
        
     #saving each SNR calculation by sourcename
@@ -70,8 +70,8 @@ def SNR_cut(sourcename):
     SNR_file = np.load(SNR_file_path+'.npy')
     
     #calculating mean SNR for h alpha and h beta regions 
-    print(r'The H beta mean SNR is', stat.mean(SNR_file[1970:2580]))
-    print(r'The H alpha mean SNR is', stat.mean(SNR_file[3260:3770]))
+    #print(r'The H beta mean SNR is', stat.mean(SNR_file[1970:2580]))
+    #print(r'The H alpha mean SNR is', stat.mean(SNR_file[3260:3770]))
     print(r'The total SNR is', stat.mean(SNR_file))
     
     
@@ -107,7 +107,7 @@ def SNR_cut(sourcename):
 
    
     plt.figure() #plots spec and SNR calc to see comparison 
-    plt.plot(lam,synthetic_flux, label='spec')
+    plt.plot(lam,flux, label='spec')
     plt.plot(lam,SNR_calc, color='orange', label='snr')
     plt.title(f'{sourcename}')
     plt.xlabel('wavelength (Ang)')
@@ -116,7 +116,7 @@ def SNR_cut(sourcename):
     return
 
 #allowing CHOICE of loop, say False if you only want to look at a particular source    
-loop = False
+loop = True
 if loop: 
     for source in Data_list:
         SNR_cut(source)
