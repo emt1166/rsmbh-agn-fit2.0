@@ -66,16 +66,15 @@ def output_file(sourcename):
         if object_name != '.DS_Store' and not object_name.endswith('.pdf'):
             Object_list.append(object_name)
     
-    
     # Create a list to store the data
     #these are for the two different .txt files we have right now
     LineProfiles_output_data = []
     LineShifts_output_data = []
     
-    for n in Object_list: #for the sourcenames in the object list
-        FWHM_path_all = pathF+n+'/'+n+'.'+f'{j}'+"_LineProperties.txt"
-        VShift_path_all = pathF+n+'/'+n+'.'+f'{j}'+"_BLV-Shifts.txt"
-    
+    for source in Object_list: #for the sourcenames in the object list
+        FWHM_path_all = pathF+source+'/'+source+'.'+f'{j}'+"_LineProperties.txt"
+        VShift_path_all = pathF+source+'/'+source+'.'+f'{j}'+"_BLV-Shifts.txt"
+        
         Object_dict = {}
         
         with open(FWHM_path_all, 'r') as fp:
@@ -96,7 +95,7 @@ def output_file(sourcename):
         
         # Extract relevant properties for FWHM
         fwhm_data = {
-            'Object ID': n,
+            'Object ID': source,
             'FWHM BHA': Object_dict.get('Broad H_alpha', {}).get('FWHM', ''),
             'FWHM BHB': Object_dict.get('Broad H_beta', {}).get('FWHM', '')
         }
@@ -133,7 +132,7 @@ def output_file(sourcename):
         
         # Extract data and append to a list
         vshift_data = {
-            'Object ID': n,
+            'Object ID': source,
             'VShift Peak BHA': VObject_dict.get('Peak H_alpha Velocity Shift', ''),
             'Kurtosis BHA': VObject_dict.get('H_alpha Kurtosis', ''), 
             'VShift Center BHA': VObject_dict.get('Center H_alpha Velocity Shift', ''),
@@ -171,8 +170,8 @@ def output_file(sourcename):
             writer.writeheader()
             # Write the data
             writer.writerows(LineShifts_output_data)
-            return
-        return 
+            
+         
 
 #------------------------------------------------------------------------------
 #ADDING CHOICE OF LOOP NOT WORKING RIGHT NOW

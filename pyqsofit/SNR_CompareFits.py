@@ -99,7 +99,7 @@ def Fit_Function(sourcename):
     
     # Preparing spectrum data, change FLUX as needed for SNR stuff 
     n = 0
-    for n in range(5):
+    for n in range(2):
         new_flux = np.loadtxt(pathF+sourcename+'/new_flux/'+sourcename+'.'+f'{n}'+'new_flux.txt')
         
         q_mle = QSOFit(lam, new_flux, err, z, ra=ra, dec=dec, plateid=plateid, mjd=mjd, 
@@ -665,14 +665,14 @@ def Fit_Function(sourcename):
 
 # -----------------------------------------------------------------------------------------
 # Allow choice of loop
-loop = False
+loop = True
 start_time = time.time()
 
 if loop:
     for source in Data_list:
         Fit_Function(source)
 else:
-    Fit_Function('0813-52354-0561')
+    Fit_Function('0719-52203-0092')
 end_time=time.time()
 
 elapsed_time = end_time - start_time

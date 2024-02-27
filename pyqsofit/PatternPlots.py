@@ -21,6 +21,9 @@ import pandas as pd
 #Here we read in the data from the csv files
 #the 'df' is to indicate it is a dataframe
 
+OutlierERRLineProfile_df = pd.read_csv('SN_LineProfiles_outputTEST.csv')
+OutlierERRLineShifts_df = pd.read_csv('SN_LineShifts_outputTEST.csv')
+
 OutlierLineProfile_df = pd.read_csv('OutliersLineProfiles_output_data2.0.csv')
 OutlierLineShifts_df = pd.read_csv('OutliersLineShifts_output_data2.0.csv')
 
@@ -29,8 +32,9 @@ ControlLineShifts_df = pd.read_csv('ControlLineShifts_output_data2.0.csv')
 
 plt.figure()
 #plt.semilogy()
+plt.scatter((OutlierERRLineShifts_df['VShift Center BHA']), OutlierERRLineShifts_df['Kurtosis BHA'], label='Outliers err_in')
 plt.scatter((OutlierLineShifts_df['VShift Center BHA']), OutlierLineShifts_df['Kurtosis BHA'], label='Outliers')
-plt.scatter((ControlLineShifts_df['VShift Center BHA']), ControlLineShifts_df['Kurtosis BHA'], label= 'Control')
+#plt.scatter((ControlLineShifts_df['BHA Asymmetry']), ControlLineShifts_df['Kurtosis BHA'], label= 'Control')
 plt.legend()
-plt.xlabel('BHB Center VShift')
-plt.ylabel('BHB Kurtosis')
+plt.xlabel('BHA Center VShift')
+plt.ylabel('BHA Kurtosis')

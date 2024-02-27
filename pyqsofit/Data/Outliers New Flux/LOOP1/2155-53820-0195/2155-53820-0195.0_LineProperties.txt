@@ -1,0 +1,38 @@
+PyQSOFit Calculated Line Properties
+
+Broad H_alpha:
+ FWHM = 8759.99 km s^-1
+ sigma = 3242.06 km s^-1
+ EW =  471.87 Ang
+ Peak =  6551.78 Ang
+ Area =  776.13 x 10^-17 erg s^-1 cm^-2
+Narrow H_alpha:
+ FWHM = 353.17 km s^-1
+ sigma = 147.63 km s^-1
+ EW =  47.28 Ang
+ Peak =  6564.69 Ang
+ Area =  77.83 x 10^-17 erg s^-1 cm^-2
+Broad H_beta:
+ FWHM = 26402.74 km s^-1
+ sigma = 12167.53 km s^-1
+ EW =  284.41 Ang
+ Peak =  4909.15 Ang
+ Area =  614.89 x 10^-17 erg s^-1 cm^-2
+Narrow H_beta:
+ FWHM = 423.48 km s^-1
+ sigma = 177.18 km s^-1
+ EW =  1.91 Ang
+ Peak =  4854.80 Ang
+ Area =  4.21 x 10^-17 erg s^-1 cm^-2
+Narrow [OIII]5007:
+ FWHM = 423.48 km s^-1
+ sigma = 177.18 km s^-1
+ EW =  25.06 Ang
+ Peak =  5000.13 Ang
+ Area =  52.86 x 10^-17 erg s^-1 cm^-2
+Narrow [OIII]4959:
+ FWHM = 423.48 km s^-1
+ sigma = 177.18 km s^-1
+ EW =  8.08 Ang
+ Peak =  4952.26 Ang
+ Area =  17.28 x 10^-17 erg s^-1 cm^-2

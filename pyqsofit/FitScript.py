@@ -371,10 +371,12 @@ def fittingscript_func(sourcename):
         # Plotting cleaned data
         fig6 = plt.figure(figsize=(15,5))
         plt.plot(wavelength, data_sub, c='k', label='BL Profile')
-        plt.xlabel(r'$\rm Rest \, Wavelength$ ($\rm \AA$)', fontsize=20)
+        plt.xlabel(r'$\rm Rest \, Wavelength$ ($\rm \AA$)', fontsize=13)
         plt.ylabel(r'$\rm f_{\lambda}$ ($\rm 10^{-17} erg\;s^{-1}\;cm^{-2}\;\AA^{-1}$)', fontsize=20)
         plt.title(f'ra,dec = ({np.round(ra, 4)},{np.round(dec, 4)})   {sourcename}   z = {np.round(float(z), 4)}',
               fontsize=20)
+        #plt.ylabel('Normalized Flux', fontsize=15)
+        #plt.xlim(4500,7000)
         plt.legend()
         plt.savefig(path5+sourcename+'_BLProfile.pdf')
         
@@ -397,7 +399,7 @@ if loop:
     for source in Data_list:
         fittingscript_func(source)
 else:
-    fittingscript_func('0332-52367-0639')    
+    fittingscript_func('1624-53386-0032')    
     
 # -----------------------------------------------------------------------------
 # Want a way to fit a spectrum multiple times for comparison purposes
