@@ -98,8 +98,8 @@ def Fit_Function(sourcename):
     # PyQSOFit - fitting portion
     
     # Preparing spectrum data, change FLUX as needed for SNR stuff 
-    n = 0
-    for n in range(2):
+    n = 3
+    for n in range(5):
         new_flux = np.loadtxt(pathF+sourcename+'/new_flux/'+sourcename+'.'+f'{n}'+'new_flux.txt')
         
         q_mle = QSOFit(lam, new_flux, err, z, ra=ra, dec=dec, plateid=plateid, mjd=mjd, 

@@ -1,0 +1,17 @@
+Calculated BL Velocity Shifts and Line Profile Parameters:
+ 
+   Peak H_alpha Velocity Shift = 0.00 km s^-1
+   Center H_alpha Velocity Shift = -71.11 km s^-1
+   C80 H_alpha Velocity Shift = -53.01 km s^-1
+   H_alpha IPV width = 6867.65
+   H_alpha Asymmetry = 0.01796
+   H_alpha Shift = 123.35
+   H_alpha Kurtosis = 0.96862
+ 
+   Peak H_beta Velocity Shift = 2272.75 km s^-1
+   Center H_beta Velocity Shift = 521.09 km s^-1
+   C80 H_beta Velocity Shift = 1010.87 km s^-1
+   H_beta IPV width = 18807.13
+   H_beta Asymmetry = 0.16665
+   H_beta Shift = 3134.13
+   H_beta Kurtosis = 0.96832

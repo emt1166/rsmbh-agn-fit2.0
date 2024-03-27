@@ -13,26 +13,26 @@ Narrow H_alpha:
  Peak =  6561.76 Ang
  Area =  268.23 x 10^-17 erg s^-1 cm^-2
 Broad H_beta:
- FWHM = 9225.94 km s^-1
- sigma = 3866.06 km s^-1
- EW =  94.42 Ang
- Peak =  4887.00 Ang
- Area =  1347.21 x 10^-17 erg s^-1 cm^-2
+ FWHM = 17215.46 km s^-1
+ sigma = 7218.08 km s^-1
+ EW =  115.09 Ang
+ Peak =  4904.29 Ang
+ Area =  1632.58 x 10^-17 erg s^-1 cm^-2
 Narrow H_beta:
- FWHM = 407.78 km s^-1
- sigma = 167.40 km s^-1
- EW =  5.70 Ang
- Peak =  4861.29 Ang
- Area =  82.01 x 10^-17 erg s^-1 cm^-2
+ FWHM = 343.17 km s^-1
+ sigma = 139.71 km s^-1
+ EW =  3.61 Ang
+ Peak =  4860.67 Ang
+ Area =  51.94 x 10^-17 erg s^-1 cm^-2
 Narrow [OIII]5007:
- FWHM = 407.78 km s^-1
- sigma = 167.40 km s^-1
- EW =  42.19 Ang
- Peak =  5006.81 Ang
- Area =  578.79 x 10^-17 erg s^-1 cm^-2
+ FWHM = 343.17 km s^-1
+ sigma = 139.71 km s^-1
+ EW =  18.59 Ang
+ Peak =  5006.17 Ang
+ Area =  255.08 x 10^-17 erg s^-1 cm^-2
 Narrow [OIII]4959:
- FWHM = 407.78 km s^-1
- sigma = 167.40 km s^-1
- EW =  13.58 Ang
- Peak =  4958.88 Ang
- Area =  189.17 x 10^-17 erg s^-1 cm^-2
+ FWHM = 343.17 km s^-1
+ sigma = 139.71 km s^-1
+ EW =  5.98 Ang
+ Peak =  4958.25 Ang
+ Area =  83.37 x 10^-17 erg s^-1 cm^-2
